@@ -8,9 +8,6 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToMany;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.Getter;
@@ -18,38 +15,31 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@Table(name = "tb_atividade")
+@Table(name = "tb_categoria")
 @Getter @Setter @NoArgsConstructor
-public class Atividade {
+public class Categoria {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
-	private String nome;
 	private String descricao;
-	private Double preco;
 	
-	@ManyToMany(mappedBy = "atividades")
-	private List<Participante> participantes = new ArrayList<>();
+	@OneToMany(mappedBy = "categoria")
+	private List<Atividade> atividades = new ArrayList<>();
 	
-	@OneToMany(mappedBy = "atividade")
-	private List<Bloco> blocos = new ArrayList<>();
 	
-	@ManyToOne
-	@JoinColumn(name = "categoria_id")
-	private Categoria categoria;
-	
-	public Atividade(Integer id, String nome, String descricao, Double preco) {
+	public Categoria(Integer id, String descricao) {
+		super();
 		this.id = id;
-		this.nome = nome;
 		this.descricao = descricao;
-		this.preco = preco;
 	}
+
 
 	@Override
 	public int hashCode() {
 		return Objects.hash(id);
 	}
+
 
 	@Override
 	public boolean equals(Object obj) {
@@ -59,7 +49,9 @@ public class Atividade {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Atividade other = (Atividade) obj;
+		Categoria other = (Categoria) obj;
 		return Objects.equals(id, other.id);
 	}
+	
+	
 }
